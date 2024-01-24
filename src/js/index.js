@@ -1,26 +1,55 @@
 const slides = document.querySelectorAll(".slide");
-const moverDireita = document.querySelectorAll(".direita");
-const moverEsquerda = document.querySelectorAll(".esquerda");
+const moverDireita = document.querySelector(".direita");
+const moverEsquerda = document.querySelector(".esquerda");
 
 let slideAtual = 0; 
 
-function nextslide() {
-    slides.forEach(indice => indice.classList.remove('selecionado'));
-    slides[slideAtual].classList.add('selecionado');
+moverDireita.addEventListener("click", function(){
+    if(slideAtual === slides.length - 1){
+        return
+    }
+
+    esconderSlide();
+
+    slideAtual++;
+
+    slides[slideAtual].classList.add("selecionado");
+
+    mostrarOuEscondersetas();
+})
+
+moverEsquerda.addEventListener("click", function(){
+    if(slideAtual === 0){
+        return;
+    }
+
+    esconderSlide();
+
+    slideAtual--;
+
+    slides[slideAtual].classList.add("selecionado");
+
+
+    mostrarOuEscondersetas();
+})
+
+function esconderSlide(){
+    const slideAberto = document.querySelector(".selecionado");
+    slideAberto.classList.remove("selecionado");
 }
 
-moverDireita.forEach(botao => {
-    botao.addEventListener('click', () => {
-        slideAtual = (slideAtual + 1) % slides.length;
-        nextslide();
-    });
-});
+function mostrarOuEscondersetas(){
+    const naoEhOPrimeiroSlide = slideAtual !== 0;
+    if(naoEhOPrimeiroSlide){
+        moverEsquerda.classList.remove("opacidade");
+    }else {
+        moverEsquerda.classList.add("opacidade");
+    }
 
-moverEsquerda.forEach(botao => {
-    botao.addEventListener('click', () => {
-        slideAtual= (slideAtual - 1 + slides.length) % slides.length;
-        nextslide();
-    });
-});
-
-nextslide();
+    const chegouNoUltimoSlide = slideAtual !== 0 && slideAtual === slides.length - 1;
+    if(chegouNoUltimoSlide){
+        moverDireita.classList.add("opacidade");
+    }else {
+        moverDireita.classList.remove("opacidade");
+    }
+}
